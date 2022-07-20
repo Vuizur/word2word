@@ -224,3 +224,14 @@ class Word2word:
             word2x, y2word, x2ys = pickle.load(f)
         print(f"Loaded word2word custom bilingual lexicon from {path}")
         return cls(lang1, lang2, word2x, y2word, x2ys)
+
+    def export_to_tabfile(self, filename, y_separator=", "):
+        """Exports the bilingual lexicon to a tab-separated file.
+        """
+        with open(filename, "w", encoding="utf-8") as f:
+            # Iterate through word2x
+            for x, x_id in self.word2x.items():
+                y_ids = self.x2ys[x_id]
+                ys = [self.y2word[y_id] for y_id in y_ids]
+                y_string = y_separator.join(ys)
+                f.write(f"{x}\t{y_string}\n")
